@@ -12,29 +12,28 @@ import csv
 
 """Inicio espacio para programar funciones propias"""
 # En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
+csv.register_dialect('colon', delimiter=',')
+csv.register_dialect('semicolon', delimiter=';')
 
-
-def readAndConvertToDict(filename):
-    csv.register_dialect('semicolon', delimiter=';')
+def readAndConvertToDict(filename, delimit):
     with open(filename, 'r') as f:
         obj = [{k: v for k, v in row.items()}
-               for row in csv.DictReader(f, dialect='semicolon')]
+               for row in csv.DictReader(f, dialect=delimit)]
     return obj
 
 def lower_prices(obj):
-    lower = min(obj, key=lambda x: x['Close'])
+    lower = min(obj, key=lambda x: x['Low'])
     return lower
 
 def Upper_prices(obj):
-    Upper = max(obj, key=lambda x: x['Close'])
+    Upper = max(obj, key=lambda x: x['High'])
     return Upper
 
-def rate_variation(obj):
+def rate_variation(obj2):
     rate = 0
-    for row in obj:
-        rate = rate + float(row['Variacion diaria'])
-    print(len(obj))
-    return rate/len(obj)
+    for row in obj2:
+        rate = rate + float(row['Variacion_diaria'])
+    return rate/len(obj2)
 
 def daily_variation_description(daily_variation):
     if daily_variation > 0:
@@ -65,7 +64,6 @@ def rewriteData(readF):
                         daily_variation, description])
     return data
 
-
 def readFile(filename):
     with open(filename, 'r') as f:
         reader = csv.reader(f)
@@ -79,7 +77,7 @@ def createFile(filename):
 
 
 def writeFile(filename, data):
-    header = 'Indice;Fecha;Open;Close;Variacion diaria;Descripcion'
+    header = 'Indice;Fecha;Open;Close;Variacion_diaria;Descripcion'
     csv.register_dialect('semicolon', delimiter=';')
     with open(filename, 'w', newline='') as f:
         writer = csv.writer(f, dialect='semicolon')
@@ -99,12 +97,13 @@ def solucion():
     readF = readFile(defaultFile)
     data = rewriteData(readF)
     writeFile(filename, data)
-    obj = readAndConvertToDict(filename)
-    fecha_menor_precio = lower_prices(obj)['Fecha']
-    menor_precio = lower_prices(obj)['Close']    
-    fecha_mayor_precio = Upper_prices(obj)['Fecha']
-    mayor_precio = Upper_prices(obj)['Close']
-    variacion_diaria_media = rate_variation(obj)
+    obj = readAndConvertToDict(defaultFile, 'colon')
+    obj2 = readAndConvertToDict(filename, 'semicolon')
+    fecha_menor_precio= str(lower_prices(obj)['Date'])
+    menor_precio = float(lower_prices(obj)['Low'])  
+    fecha_mayor_precio= str(Upper_prices(obj)['Date'])
+    mayor_precio = float(Upper_prices(obj)['High'])
+    variacion_diaria_media = float(rate_variation(obj2))
     return fecha_menor_precio, menor_precio, fecha_mayor_precio, mayor_precio, variacion_diaria_media
 
 
