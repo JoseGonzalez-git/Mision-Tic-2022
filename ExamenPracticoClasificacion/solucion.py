@@ -19,14 +19,19 @@ from os import read
 def rewriteData(readF):
     index = 0
     data = []
-    print(len(readF))
+    fecha = str
+    open = float
+    close = float
+    daily_variation = float
     for row in readF:
-        items = []
-        items.append(str(index))
         index = index + 1
-        data.append(items)
+        if index > 1:
+            fecha = row[0]
+            open = float(row[1])
+            close = float(row[2])
+            daily_variation = close - open
+            data.append([index-2, fecha, open, close, daily_variation])
     return data
-        
 
 
 def readFile(filename):
@@ -50,7 +55,6 @@ def writeFile(filename, data):
         writer.writerow(header.split(';'))
         for row in data:
             writer.writerow(row)
-        print(data)
 
 
 """Fin espacio para programar funciones propias"""
