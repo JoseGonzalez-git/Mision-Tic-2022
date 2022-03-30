@@ -1,6 +1,9 @@
-#NO ELIMINAR LAS SIGUIENTES IMPORTACIONES, sirven para probar tu código en consola, y el funcionamiento de la librería csv respectivamente
-from test import tester
+# NO ELIMINAR LAS SIGUIENTES IMPORTACIONES, sirven para probar tu código en consola, y el funcionamiento de la librería csv respectivamente
+
 import csv
+from math import radians
+from operator import index
+from os import read
 
 """NOTAS: 
     - PARA ESTE RETO PUEDES PROBAR TU PROGRAMA, DANDO CLICK EN LA NAVE ESPACIAL
@@ -10,22 +13,65 @@ import csv
 
 
 """Inicio espacio para programar funciones propias"""
-#En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
+# En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
 
+
+def rewriteData(readF):
+    index = 0
+    data = []
+    print(len(readF))
+    for row in readF:
+        items = []
+        items.append(str(index))
+        index = index + 1
+        data.append(items)
+    return data
+        
+
+
+def readFile(filename):
+    with open(filename, 'r') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+    return data
+
+
+def createFile(filename):
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        print(filename)
+
+
+def writeFile(filename, data):
+    header = 'Indice;Fecha;Open;Close;Variacion_diaria;Descripcion'
+    csv.register_dialect('semicolon', delimiter=';')
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f, dialect='semicolon')
+        writer.writerow(header.split(';'))
+        for row in data:
+            writer.writerow(row)
+        print(data)
 
 
 """Fin espacio para programar funciones propias"""
 
+
 def solucion():
-    #ESTA ES LA FUNCIÓN A LA QUE LE DEBES GARANTIZAR LOS RETORNOS REQUERIDOS EN EL ENUNCIADO.
-    
-    
-    
-    return fecha_menor_precio, menor_precio, fecha_mayor_precio, mayor_precio, variacion_diaria_media
+    # ESTA ES LA FUNCIÓN A LA QUE LE DEBES GARANTIZAR LOS RETORNOS REQUERIDOS EN EL ENUNCIADO.
+    defaultFile = 'BTC-USD.csv'
+    filename = 'analisis_bitcoin.csv'
+    createFile(filename)
+    readF = readFile(defaultFile)
+    data = rewriteData(readF)
+    writeFile(filename, data)
+    # return fecha_menor_precio, menor_precio, fecha_mayor_precio, mayor_precio, variacion_diaria_media
+
 
 """
 NO COLOCAR CÓDIGO FUERA DE LAS FUNCIONES QUE USTED DESARROLLE
 Esta línea de código que sigue permite saber si su solución al ejercicio es correcto
 Por favor NO ELIMINARLA, NO MODIFICARLA
 """
-tester(solucion)
+if __name__ == "__main__":
+    print("Ejecutando pruebas de solución")
+    solucion()
