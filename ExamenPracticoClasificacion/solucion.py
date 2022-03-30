@@ -1,9 +1,7 @@
 # NO ELIMINAR LAS SIGUIENTES IMPORTACIONES, sirven para probar tu código en consola, y el funcionamiento de la librería csv respectivamente
 
 import csv
-from math import radians
-from operator import index
-from os import read
+
 
 """NOTAS: 
     - PARA ESTE RETO PUEDES PROBAR TU PROGRAMA, DANDO CLICK EN LA NAVE ESPACIAL
@@ -15,6 +13,29 @@ from os import read
 """Inicio espacio para programar funciones propias"""
 # En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
 
+
+def readAndConvertToDict(filename):
+    csv.register_dialect('semicolon', delimiter=';')
+    with open(filename, 'r') as f:
+        obj = [{k: v for k, v in row.items()}
+               for row in csv.DictReader(f, dialect='semicolon')]
+    return obj
+
+def lower_prices(obj):
+    lower = min(obj, key=lambda x: x['Close'])
+    return lower
+
+def Upper_prices(obj):
+    Upper = max(obj, key=lambda x: x['Close'])
+    return Upper
+
+def rate_variation(obj):
+    rate = 0
+    for row in obj:
+        rate = rate + float(row['Variacion diaria'])
+    print(len(obj))
+    return rate/len(obj)
+
 def daily_variation_description(daily_variation):
     if daily_variation > 0:
         return 'Sube'
@@ -22,6 +43,7 @@ def daily_variation_description(daily_variation):
         return 'Baja'
     elif daily_variation == 0:
         return 'Estable'
+
 
 def rewriteData(readF):
     index = 0
@@ -39,7 +61,8 @@ def rewriteData(readF):
             close = float(row[4])
             daily_variation = close - open
             description = daily_variation_description(daily_variation)
-            data.append([index-2, fecha, open, close, daily_variation, description])
+            data.append([index-2, fecha, open, close,
+                        daily_variation, description])
     return data
 
 
@@ -53,11 +76,10 @@ def readFile(filename):
 def createFile(filename):
     with open(filename, 'w', newline='') as f:
         writer = csv.writer(f)
-        print(filename)
 
 
 def writeFile(filename, data):
-    header = 'Indice;Fecha;Open;Close;Variacion_diaria;Descripcion'
+    header = 'Indice;Fecha;Open;Close;Variacion diaria;Descripcion'
     csv.register_dialect('semicolon', delimiter=';')
     with open(filename, 'w', newline='') as f:
         writer = csv.writer(f, dialect='semicolon')
@@ -77,7 +99,13 @@ def solucion():
     readF = readFile(defaultFile)
     data = rewriteData(readF)
     writeFile(filename, data)
-    # return fecha_menor_precio, menor_precio, fecha_mayor_precio, mayor_precio, variacion_diaria_media
+    obj = readAndConvertToDict(filename)
+    fecha_menor_precio = lower_prices(obj)['Fecha']
+    menor_precio = lower_prices(obj)['Close']    
+    fecha_mayor_precio = Upper_prices(obj)['Fecha']
+    mayor_precio = Upper_prices(obj)['Close']
+    variacion_diaria_media = rate_variation(obj)
+    return fecha_menor_precio, menor_precio, fecha_mayor_precio, mayor_precio, variacion_diaria_media
 
 
 """
