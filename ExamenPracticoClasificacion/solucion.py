@@ -15,6 +15,13 @@ from os import read
 """Inicio espacio para programar funciones propias"""
 # En este espacio podrás programar las funciones que deseas usar en la función solución (ES OPCIONAL)
 
+def daily_variation_description(daily_variation):
+    if daily_variation > 0:
+        return 'Sube'
+    elif daily_variation < 0:
+        return 'Baja'
+    elif daily_variation == 0:
+        return 'Estable'
 
 def rewriteData(readF):
     index = 0
@@ -23,14 +30,16 @@ def rewriteData(readF):
     open = float
     close = float
     daily_variation = float
+    description = str
     for row in readF:
         index = index + 1
         if index > 1:
             fecha = row[0]
             open = float(row[1])
-            close = float(row[2])
+            close = float(row[4])
             daily_variation = close - open
-            data.append([index-2, fecha, open, close, daily_variation])
+            description = daily_variation_description(daily_variation)
+            data.append([index-2, fecha, open, close, daily_variation, description])
     return data
 
 
