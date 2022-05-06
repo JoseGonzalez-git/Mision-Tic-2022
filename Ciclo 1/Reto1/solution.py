@@ -10,20 +10,20 @@ Por eso LEER MUY BIEN LO QUE SE SOLICITA Y LAS RESTRICCIONES QUE SE LE IMPUSIERO
 def solucion(b, n):
     # ACÁ INICIA LA FUNCIÓN SOLUCIÓN (En este espacio debes entregar tu solución)
     validador = True
-    𝑐𝑎𝑛𝑡𝑖𝑑𝑎𝑑_𝑖𝑛𝑡𝑒𝑛𝑡𝑜s = 0
+    cantidad_de_intentos = 0
     while validador:
         valor_ingresado = int(input(f"Ingrese un numero entre {0} y {b}: "))
         if valor_ingresado < 0 or valor_ingresado > b:
             print("¡Te saliste del intervalo!")
         elif valor_ingresado > n:
-            𝑐𝑎𝑛𝑡𝑖𝑑𝑎𝑑_𝑖𝑛𝑡𝑒𝑛𝑡𝑜s += 1
+            cantidad_de_intentos += 1
             print("¡Ups! Te pasaste")
         elif valor_ingresado < n:
-            𝑐𝑎𝑛𝑡𝑖𝑑𝑎𝑑_𝑖𝑛𝑡𝑒𝑛𝑡𝑜s += 1
+            cantidad_de_intentos += 1
             print("¡Ups! Estás por debajo")
         elif valor_ingresado == n:
-            𝑐𝑎𝑛𝑡𝑖𝑑𝑎𝑑_𝑖𝑛𝑡𝑒𝑛𝑡𝑜s += 1
-            print(f"¡LO LOGRASTE! Usaste {𝑐𝑎𝑛𝑡𝑖𝑑𝑎𝑑_𝑖𝑛𝑡𝑒𝑛𝑡𝑜s} intentos")
+            cantidad_de_intentos += 1
+            print(f"¡LO LOGRASTE! Usaste {cantidad_de_intentos} intentos")
             validador = False
 
     # ACÁ TERMINA LA FUNCIÓN SOLUCIÓN
